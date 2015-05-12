@@ -4,5 +4,8 @@
 
 echo "* Regenerating SSH cryptographic keys"
 
-rm -f /etc/ssh/*_key{,.pub}
+for f in /etc/ssh/*_key{,.pub}; do
+ rm -f $f
+done
+
 dpkg-reconfigure openssh-server
