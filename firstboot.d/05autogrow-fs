@@ -37,7 +37,7 @@ PARTINFOX=(${PARTINFO})
 [ "${PARTINFOX[0]}" != "$AUTOGROW_PART" ] && exit 1
 [ "${PARTINFOX[1]}" != "start" ] && exit 1
 [ "${PARTINFOX[3]}" != "size" ] && exit 1
-[ "${PARTINFOX[5]}" != "Id" ] && exit 1
+[ "${PARTINFOX[5]}" != "Id" ] && [ "${PARTINFOX[5]}" != "type" ] && exit 1
 
 START=${PARTINFOX[2]}
 SIZE=${PARTINFOX[4]}
@@ -61,7 +61,12 @@ else
   lvextend -l+100%FREE $AUTOGROW_FS 2>/dev/null 
   ERR=$?
   [ $ERR -eq 3 ] && exit 0
-  [ $ERR -eq 0 ] && resize2fs $AUTOGROW_FS && touch /forcefsck && exit 42
+  if [ -n "$(file -sL $AUTOGROW_FS | grep XFS)" ];
+  then
+   [ $ERR -eq 0 ] && xfs_growfs $AUTOGROW_FS && exit 0
+  else
+   [ $ERR -eq 0 ] && resize2fs $AUTOGROW_FS && touch /forcefsck && exit 42
+  fi
  fi
 fi
 
