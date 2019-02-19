@@ -16,5 +16,5 @@ if [ $USERNAME != "admin" ]; then
  fi
 fi
 
-$INITHOOKS_PATH/bin/setpass.py $USERNAME --pass="$ROOT_PASS"
+echo "${USERNAME}:${ROOT_PASS}" | chpasswd
 
