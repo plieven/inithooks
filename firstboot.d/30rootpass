@@ -7,5 +7,14 @@ USERNAME=root
 [ "$(echo $SUDOADMIN | tr [A-Z] [a-z] )" = "true" ] && USERNAME=admin
 
 [ -e $INITHOOKS_CONF ] && . $INITHOOKS_CONF
+
+if [ $USERNAME != "admin" ]; then
+ if [ $USERNAME != "root" ]; then
+  if [ ! -e /home/$USERNAME ]; then
+   useradd -g users -G sudo -s /bin/bash -d /home/$USERNAME -m $USERNAME
+  fi
+ fi
+fi
+
 $INITHOOKS_PATH/bin/setpass.py $USERNAME --pass="$ROOT_PASS"
 
