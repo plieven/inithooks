@@ -25,6 +25,10 @@ if [ "$IP_CONFIG" = "static" ]; then
  echo " netmask $IP_NETMASK" >>/etc/network/interfaces
  echo " gateway $IP_GW" >>/etc/network/interfaces
  echo " dns-nameservers $IP_DNS1 $IP_DNS2" >>/etc/network/interfaces
+ echo "nameserver $IP_DNS1" >/etc/resolv.conf
+ if [ -n "$IP_DNS2" ]; then
+  echo "nameserver $IP_DNS2" >>/etc/resolv.conf
+ fi
 fi
 
 # disable this script to avoid a reboot loop
